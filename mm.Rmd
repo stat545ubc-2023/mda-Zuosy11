@@ -108,7 +108,7 @@ The three attributes are chosen to be 1) the number of rows and 2) columns/varia
 I)  steam_games:
 
 ```{r}
-head(steam_games)
+glimpse(steam_games)
 ```
 
 steam_games has 21 columns/variables. Most of them are of completely character type, while the remaining ones are of double type. In my view, extracting information from character variables, especially when they are the most important, could prove to be quite challenging.
@@ -125,7 +125,7 @@ In conclusion, steam_games is a 40833x21 tibble with many \<chr\> variables.
 II) parking_meters
 
 ```{r}
-head(parking_meters)
+glimpse(parking_meters)
 ```
 
 parking_meters has 22 columns/variables. Although most of them are also \<chr\>, they are just numbers with a unit or symbol such as Hr or \$, which is easy to extract.
@@ -142,7 +142,7 @@ In conclusion, parking_meters is a 10032x22 tibble with simpler and clearer vari
 III) building_permits
 
 ```{r}
-head(building_permits)
+glimpse(building_permits)
 ```
 
 building_permits comprises 14 columns/variables, which is comparatively fewer than the two datasets mentioned earlier. Nonetheless, it not only includes numerous \<chr\> variables but also contains a significant number of missing (NA) values, making it challenging for analysis and manipulation.
@@ -159,7 +159,7 @@ In conclusion, building_permits is a 20680x14 tibble with many \<chr\> variables
 IV) apt_buildings
 
 ```{r}
-head(apt_buildings)
+glimpse(apt_buildings)
 ```
 
 apt_buildings consists of 37 columns/variables, which is considerably more than the previously mentioned datasets. However, it's important to note that the majority of these columns only contain binary logical values, typically represented as "YES" or "NO." While having a large number of columns can make the dataset more comprehensive, the dominance of binary values simplifies the nature of the data, potentially making it easier to work with for specific analytical tasks that involve Boolean conditions or criteria.
@@ -241,7 +241,7 @@ Ex.3 Investigate how many missing values there are per variable. Can you find a 
 ```{r}
 ex_3 <- parking_meters %>%
   summarise_all(~sum(is.na(.)))
-print(ex_3)
+glimpse(ex_3)
 ```
 
 At first glance, it's evident that the 'rate_misc' and 'time_misc' variables have significantly more missing values compared to the others. Consequently, I have decided to exclude them from further analysis. We can proceed to visualize the remaining variables:
@@ -293,7 +293,7 @@ I am only interested in the rates, time limits, credit card acceptance, coordina
 
 ```{r}
 ex_7 <- select(parking_meters, -c(meter_head,rate_misc,time_in_effect,time_misc,pay_phone,meter_id))
-print(ex_7)
+glimpse(ex_7)
 ```
 
 <!----------------------------------------------------------------------------->
