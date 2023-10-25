@@ -360,7 +360,7 @@ m2.1 <- m2 %>%
   rowwise() %>%
   mutate(avg_rate = mean(c_across(starts_with("r")), na.rm = TRUE)) %>%
   mutate(avg_time = mean(c_across(starts_with("t")), na.rm = TRUE)) %>%
-  select(c(avg_rate,avg_time,credit_card,geo_local_area))
+  select(c(avg_rate,avg_time,credit_card, longitude, latitude, geo_local_area))
 glimpse(m2.1)
 ```
 
@@ -395,7 +395,7 @@ I modified the dataset from Task 1, q2_opt3.2 (I already used between 4 and 8 fu
 
 ```{r}
 m2.2 <- q2_opt3.2 %>%
-  select(c(avg_rate,avg_time,rate_level, time_level, credit_card,geo_local_area))
+  select(c(avg_rate,avg_time,rate_level, time_level, credit_card, geo_local_area))
 glimpse(m2.2)
 ```
 
@@ -426,7 +426,7 @@ Fit a model or run a hypothesis test that provides insight on this variable with
 <!-------------------------- Start your work below ---------------------------->
 
 ```{r}
-ex3.1 <- lm(avg_rate ~ avg_time, m2.1)
+ex3.1 <- lm(avg_rate ~ avg_time, m2.2)
 ex3.1
 ```
 
