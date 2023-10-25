@@ -1,6 +1,8 @@
 ---
 title: "Mini Data Analysis Milestone 2"
-output: html_document
+output:
+  github_document: default
+  html_document: default
 ---
 
 *To complete this milestone, you can either edit [this `.rmd` file](https://raw.githubusercontent.com/UBC-STAT/stat545.stat.ubc.ca/master/content/mini-project/mini-project-2.Rmd) directly. Fill in the sections that are commented out with `<!--- start your work here--->`. When you are done, make sure to knit to an `.md` file by changing the output in the YAML header to `github_document`, before submitting a tagged release on canvas.*
@@ -129,7 +131,7 @@ glimpse(q1_opt1)
 ```
 
 ```{r}
-# Option 6: Make a graph where it makes sense to customize the alpha transparency.
+# Option 7: Make a graph where it makes sense to customize the alpha transparency.
 c <- group_by(m2,geo_local_area) %>%
   count(r_sa_9a_6p,t_sa_9a_6p)
 
@@ -148,9 +150,9 @@ q1_opt6 <- ggplot(c, aes(x = r_sa_9a_6p, y = geo_local_area)) +
 plot(q1_opt6)
 ```
 
-For Research Q1, Option 1 and 6 were selected. Opt.1 shows the range, mean, median, and standard deviation of the numerical variable r_sa_9a_6p (rate during Saturday 9am to 6pm) across the categorical variable geo_local_area, which gives me an impression of the characteristics of the numerical values in this dataset. Opt.6 shows the distribution of parking rates and time limits in different areas during Saturday 6am - 9pm. The customized alpha indicates the number of a specific parking rate and time limit. It can be concluded from the plot, for example, Downtown has more short-time but high-rate parking meters (small circle at high rates) and it doesn't have many long-time parking meters(big circle with low alpha).
+For Research Q1, Option 1 and 7 were selected. Opt.1 shows the range, mean, median, and standard deviation of the numerical variable r_sa_9a_6p (rate during Saturday 9am to 6pm) across the categorical variable geo_local_area, which gives me an impression of the characteristics of the numerical values in this dataset. Opt.7 shows the distribution of parking rates and time limits in different areas during Saturday 6am - 9pm. The customized alpha indicates the number of a specific parking rate and time limit. It can be concluded from the plot, for example, Downtown has more short-time but high-rate parking meters (small circle at high rates) and it doesn't have many long-time parking meters(big circle with low alpha).
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Research Q2: Do areas with shorter time limits tend to have lower parking rates, and vice versa? I would like to explore the relationship between parking rates and time limits.
 
@@ -164,8 +166,9 @@ q2_opt3.1 <- m2 %>%
 glimpse(q2_opt3.1)
 ```
 
-```{r} # find the range to specify levels}
-range(q2_opt3.1$avg_rate)
+```{r}
+# find the range to specify levels 
+range(q2_opt3.1$avg_rate) 
 range(q2_opt3.1$avg_time)
 ```
 
@@ -176,14 +179,14 @@ q2_opt3.2 <- q2_opt3.1 %>%
                                  avg_rate < 6 ~ "moderate",
                                  avg_rate < 8 ~ "high",
                                   TRUE ~ "very high"),
-                             levels = c('very low', 'low', 'moderate', 'high', 'very high'))) %>%
+                  levels = c('very low', 'low', 'moderate', 'high', 'very high'))) %>%
   
   mutate(time_level = factor(case_when(avg_time < 4 ~ "very low",
                                  avg_time < 8 ~ "low",
                                  avg_time < 12 ~ "moderate",
                                  avg_time < 16 ~ "high",
                                   TRUE ~ "very high"),
-                             levels = c('very low', 'low', 'moderate', 'high', 'very high')))
+                  levels = c('very low', 'low', 'moderate', 'high', 'very high')))
 glimpse(q2_opt3.2)
 ```
 
@@ -201,7 +204,7 @@ plot(q2_opt8)
 
 For Research Q2, Option 3 and 8 were selected. Opt. 3 takes the average of parking rates and time limits for every row, which means it excluded the differences in time intervals. After that, I found the range of the averages and set the levels as very low, low, moderate, high, and very high. Then mutate the new variables to the dataset. Opt.8 shows a boxplot and a violin plot of average rate vs time limit levels. It clearly indicates that as time limit increases, the rate decreases, but there are some exceptions.
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Research Q3: Does the acceptance of credit card relate to parking rates? I would like to explore whether the payment method will affect the rates.
 
@@ -230,7 +233,7 @@ plot(q3_opt8)
 
 For Research Q3, Option 2 and 8 were selected. Opt. 2 counts the observations of credit card acceptance at each rate in each area. For example, an average rate of \$0.5 and cannot be paid with credit card in Downtown appears 6 time. This table is plotted in Opt.8, which is a combination of boxplot and jitterplot. It is obvious that parking meters that can be paid by credit cards have a higher average rate. Also, most of the parking meters do not accept credit card. Moreover, the majority of credit card paid areas appears to have a warmer color, e.g. Downtown, Fairview, West End.
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Research Q4: How do the geographical coordinates (latitude and longitude) of parking spaces influence pricing and time limits? In addition to analyzing regional patterns, I also plan to plot precise maps of parking space coordinates, allowing us to visualize their distribution and its relation to pricing and time limits.
 
@@ -238,31 +241,25 @@ Research Q4: How do the geographical coordinates (latitude and longitude) of par
 #Option 2: Compute the number of observations for at least one of your categorical variables. Do not use the function table()!
 q4_opt2 <- m2 %>%
   count(geo_local_area)
-q4_opt2 
+glimpse(q4_opt2)
 ```
 
 ```{r}
-# Option 8: Create a graph that has at least two geom layers.
-canada <- map_data("world", region = "Canada")
-ggplot(q2_opt3.1, aes(x = longitude, y = latitude)) + geom_polygon(data = canada, aes(x=long, y = lat, group = group),fill = 'white', color = 'black') + 
-  coord_cartesian(xlim = c(-123.25, -123), ylim = c(49.21, 49.3)) + geom_point(size = 0.1)
+# Option 7: Make a graph where it makes sense to customize the alpha transparency.
+q4_opt7 <-
+ggplot(q2_opt3.1, aes(x = longitude, y = latitude)) +  
+  geom_point(color = 'blue',size = 0.01, aes(alpha = avg_rate)) + 
+  labs(
+    title = 'Average rate in local areas by coordinates',
+    x = 'Longitude',
+    y = 'Latitude'
+  )
+plot(q4_opt7)
 ```
 
-```{r}
+For Research Q4, Option 2 and 7 were selected. Opt. 2 counts the observations of geo_local_areas, showing that Downtown has the most number of parking meters. Opt.7 plots the average rate by customized alpha in specific coordinates. The points cluster at some of the main streets in Vancouver, where the average rates are also high.
 
-img <- jpeg::readJPEG('map.png')
-
-# Plot with background image
-ggplot(m2, aes(longitude, latitude))+
-annotation_raster(img,
-                    xmin = -Inf, xmax = Inf,
-                    ymin = -Inf, ymax = Inf)
- #fill_palette("jco")
-```
-
-For Research Q4, Option 2 and 8 were selected. Opt. 2 counts the observations of credit card acceptance at each rate in each area. For example, an average rate of \$0.5 and cannot be paid with credit card in Downtown appears 6 time. This table is plotted in Opt.8, which is a combination of boxplot and jitterplot. It is obvious that parking meters that can be paid by credit cards have a higher average rate. Also, most of the parking meters do not accept credit card. Moreover, the majority of credit card paid areas appears to have a warmer color, e.g. Downtown, Fairview, West End.
-
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 <!----------------------------------------------------------------------------->
 
@@ -278,7 +275,7 @@ Q2. The question is nearly answered. From the plot I can see the relationship be
 
 Q3. The question is nearly answered. From the plot I can see the relationship between payment method and parking rates. Parking meters that can be paid by credit cards have a higher average rate. Also, most of the parking meters do not accept credit card.
 
-Q4. I tried to use a real world map as the background of the plot, but I couldn't figure it out. This assignment is limited to using ggplot so many other methods cannot be used. I've tried geom_sf(), geom_ploygon(), geom_map(), even imported jpeg package, which none of them worked. I guess the best way is to use a google map API or something else.
+Q4. I tried to use a real world map as the background of the plot, but I couldn't figure it out. This assignment is limited to using ggplot so many other methods cannot be used. I've tried geom_sf(), geom_map(), even imported jpeg/png package, but none of them worked. Finally I decided to use a simple but straightforward dot plot.
 
 <!----------------------------------------------------------------------------->
 
@@ -394,7 +391,7 @@ Now, try to choose a version of your data that you think will be appropriate to 
 
 <!--------------------------- Start your work below --------------------------->
 
-I modified the dataset from Task 1, q2_opt3.2. The new dataset, m2.2, will only include the avg_rate, avg_time, rate_level, time_level, credit_card, and geo_local_area variables.
+I modified the dataset from Task 1, q2_opt3.2 (I already used between 4 and 8 functions to generate this dataset so I just call it). The new dataset, m2.2, will only include the avg_rate, avg_time, rate_level, time_level, credit_card, and geo_local_area variables.
 
 ```{r}
 m2.2 <- q2_opt3.2 %>%
@@ -449,8 +446,9 @@ Regression coefficients:
 
 ```{r}
 library(broom)
+
 ex3.2 <- tidy(ex3.1)
-ex3.2
+glimpse(ex3.2)
 ```
 
 Predictions:
